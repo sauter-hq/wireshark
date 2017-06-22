@@ -3769,6 +3769,58 @@ BACnetEventState [] = {
 };
 
 static const value_string
+BACnetFaultType [] = {
+    {  0, "none"},
+    {  1, "fault-characterstring"},
+    {  2, "fault-extended"},
+    {  3, "fault-life-safety"},
+    {  4, "fault-state"},
+    {  5, "fault-status-flags"},
+    {  0,  NULL}
+};
+
+
+static const value_string
+BACnetLightingInProgress [] = {
+    {  0, "idle"},
+    {  1, "fade-active"},
+    {  2, "ramp-active"},
+    {  3, "not-controlled"},
+    {  4, "other"},
+    { 0,  NULL}
+};
+
+static const value_string
+BACnetLightingOperation [] = {
+    {  0, "none"},
+    {  1, "fade-to"},
+    {  2, "ramp-to"},
+    {  3, "step-up"},
+    {  4, "step-down"},
+    {  5, "step-on"},
+    {  6, "step-off"},
+    {  7, "warn"},
+    {  8, "warn-off"},
+    {  9, "warn-relinquish"},
+    { 10, "stop"},
+    { 0,  NULL}
+/* Enumerated values 0-255 are reserved for definition by ASHRAE.
+   Enumerated values 256-65535 may be used by others subject to
+   the procedures and constraints described in Clause 23. */
+};
+
+static const value_string
+BACnetLightingTransition [] = {
+    {  0, "none"},
+    {  1, "fade"},
+    {  2, "ramp"},
+    { 0,  NULL}
+/* Enumerated values 0-63 are reserved for definition by ASHRAE.
+   Enumerated values 64-255 may be used by others subject to
+   the procedures and constraints described in Clause 23. */
+};
+
+static const value_string
 BACnetLogStatus [] = {
     { 0, "log-disabled" },
     { 1, "buffer-purged" },
@@ -4982,6 +5034,16 @@ BACnetVendorIdentifiers [] = {
     { 0, NULL }
 };
 static value_string_ext BACnetVendorIdentifiers_ext = VALUE_STRING_EXT_INIT(BACnetVendorIdentifiers);
+
+static const value_string
+BACnetWriteStatus [] = {
+    {  0, "idle"},
+    {  1, "in-progress"},
+    {  2, "successful"},
+    {  3, "failed"},
+    { 0,  NULL}
+};
+
 
 static int proto_bacapp = -1;
 static int hf_bacapp_type = -1;
@@ -7170,6 +7232,23 @@ fAbstractSyntaxNType(tvbuff_t *tvb, packet_info *pinfo, proto_tree *tree, guint 
             save_object_type = object_type;
             offset = fListOfGroupMembers(tvb, pinfo, tree, offset);
             object_type = save_object_type;
+            break;
+        case 359: /* fault-type */
+            offset = fApplicationTypesEnumerated(tvb, pinfo, tree, offset, ar,
+                BACnetFaultType);
+            break;
+        case 370: /* write-status */
+            offset = fApplicationTypesEnumerated(tvb, pinfo, tree, offset, ar,
+                BACnetWriteStatus);
+            break;
+        case 378: /* in-progress */
+            offset = fApplicationTypesEnumerated(tvb, pinfo, tree, offset, ar,
+                BACnetLightingInProgress);
+            break;
+        case 380: /* lighting-command */
+        case 385: /* transition */
+            offset = fApplicationTypesEnumerated(tvb, pinfo, tree, offset, ar,
+                BACnetLightingTransition);
             break;
         case 85:    /* present-value */
             if ( object_type == 11 )    /* group object handling of present-value */
