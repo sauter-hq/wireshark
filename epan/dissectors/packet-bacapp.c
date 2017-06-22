@@ -7090,6 +7090,7 @@ fAbstractSyntaxNType(tvbuff_t *tvb, packet_info *pinfo, proto_tree *tree, guint 
         case 19:  /* controlled-variable-reference */
         case 60:  /* manipulated-variable-reference */
         case 132: /* log-device-object-property */
+        case 355: /* event-algorithm-inhibit-ref */
             offset = fDeviceObjectPropertyReference(tvb, pinfo, tree, offset);
             break;
         case 109: /* Setpoint-Reference */
