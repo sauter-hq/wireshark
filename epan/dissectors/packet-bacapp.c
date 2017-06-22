@@ -2666,9 +2666,12 @@ BACnetReliability [] = {
     /* enumeration value 11 is reserved for a future addendum */
     { 12, "communication-failure"},
     { 13, "member-fault"},
-    { 14, "monitored-object-fault" },
-    { 15, "tripped" },
+    { 14, "monitored-object-fault"},
+    { 15, "tripped"},
     { 0,  NULL}
+/* Enumerated values 0-63 are reserved for definition by ASHRAE.
+   Enumerated values 64-65535 may be used by others subject to
+   procedures and constraints described in Clause 23. */
 };
 
 static const value_string
@@ -2756,6 +2759,10 @@ BACnetObjectType [] = {
     { 48, "positive-integer-value"},
     { 49, "time-pattern-value"},
     { 50, "time-value"},
+    { 51, "notification-forwarder"},
+    { 52, "alert-enrollment"},
+    { 53, "channel"},
+    { 54, "lighting-output"},
     { 0,  NULL}
 /* Enumerated values 0-127 are reserved for definition by ASHRAE.
    Enumerated values 128-1023 may be used by others subject to
@@ -3470,6 +3477,41 @@ BACnetPropertyIdentifier [] = {
     { 349, "covu-period"},
     { 350, "covu-recipients"},
     { 351, "event-message-texts"},
+    { 352, "event-message-texts-config"},
+    { 353, "event-detection-enable"},
+    { 354, "event-algorithm-inhibit"},
+    { 355, "event-algorithm-inhibit-ref"},
+    { 356, "time-delay-normal"},
+    { 357, "reliability-evaluation-inhibit"},
+    { 358, "fault-parameters"},
+    { 359, "fault-type"},
+    { 360, "local-forwarding-only"},
+    { 361, "process-identifier-filter"},
+    { 362, "subscribed-recipients"},
+    { 363, "port-filter"},
+    { 364, "authorization-exemptions"},
+    { 365, "allow-group-delay-inhibit"},
+    { 366, "channel-number"},
+    { 367, "control-groups"},
+    { 368, "execution-delay"},
+    { 369, "last-priority"},
+    { 370, "write-status"},
+    { 371, "property-list"},
+    { 372, "serial-number"},
+    { 373, "blink-warn-enable"},
+    { 374, "default-fade-time"},
+    { 375, "default-ramp-rate"},
+    { 376, "default-step-increment"},
+    { 377, "egress-timer"},
+    { 378, "in-progress"},
+    { 379, "instantaneous-power"},
+    { 380, "lighting-command"},
+    { 381, "lighting-command-default-priority"},
+    { 382, "max-actual-value"},
+    { 383, "min-actual-value"},
+    { 384, "power"},
+    { 385, "transition"},
+    { 386, "egress-active"},
     { 0,   NULL}
 /* Enumerated values 0-511 are reserved for definition by ASHRAE.
    Enumerated values 512-4194303 may be used by others subject to
@@ -3962,8 +4004,9 @@ static const value_string
 BACnetLockStatus [] = {
     { 0, "locked" },
     { 1, "unlocked" },
-    { 2, "fault" },
-    { 3, "unknown" },
+    { 2, "lock-fault" },
+    { 3, "unused" },
+    { 4, "unknown" },
     { 0, NULL }
 };
 
