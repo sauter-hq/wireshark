@@ -1526,7 +1526,7 @@ fDeviceObjectPropertyReference(tvbuff_t *tvb, packet_info *pinfo, proto_tree *tr
  * BACnetObjectPropertyReference ::= SEQUENCE {
  *  objectIdentifier    [0] BACnetObjectIdentifier,
  *  propertyIdentifier  [1] BACnetPropertyIdentifier,
- *  propertyArrayIndex  [2] Unsigend OPTIONAL,
+ *  propertyArrayIndex  [2] Unsigned OPTIONAL,
  * }
  * @param tvb the tv buffer of the current data
  * @param pinfo the packet info of the current data
@@ -4171,7 +4171,7 @@ BACnetVendorIdentifiers [] = {
     { 162, "ASI Controls" },
     { 163, "SysMik GmbH Dresden" },
     { 164, "HSC Regelungstechnik GmbH" },
-    { 165, "Smart Temp Australia Pty.  Ltd." },
+    { 165, "Smart Temp Australia Pty. Ltd." },
     { 166, "Cooper Controls" },
     { 167, "Duksan Mecasys Co., Ltd." },
     { 168, "Fuji IT Co., Ltd." },
