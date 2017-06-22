@@ -57,22 +57,6 @@ static int bacapp_tap = -1;
 
 
 /**
- * dissect_bacapp ::= CHOICE {
- *  confirmed-request-PDU       [0] BACnet-Confirmed-Request-PDU,
- *  unconfirmed-request-PDU     [1] BACnet-Unconfirmed-Request-PDU,
- *  simpleACK-PDU               [2] BACnet-SimpleACK-PDU,
- *  complexACK-PDU              [3] BACnet-ComplexACK-PDU,
- *  segmentACK-PDU              [4] BACnet-SegmentACK-PDU,
- *  error-PDU                   [5] BACnet-Error-PDU,
- *  reject-PDU                  [6] BACnet-Reject-PDU,
- *  abort-PDU                   [7] BACnet-Abort-PDU
- * }
- * @param tvb the tv buffer of the current data
- * @param pinfo the packet info of the current data
- * @param tree the tree to append this item to
- **/
-
-/**
  * ConfirmedRequest-PDU ::= SEQUENCE {
  *  pdu-type                    [0] Unsigned (0..15), -- 0 for this PDU Type
  *  segmentedMessage            [1] BOOLEAN,
