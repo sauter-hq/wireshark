@@ -1657,6 +1657,21 @@ fDeviceObjectReference(tvbuff_t *tvb, packet_info *pinfo, proto_tree *tree, guin
 static guint
 fEventParameter(tvbuff_t *tvb, packet_info *pinfo, proto_tree *tree, guint offset);
 
+/*
+BACnetLightingCommand ::= SEQUENCE {
+      operation              [0]      BACnetLightingOperation,
+      target-level           [1]      REAL (0.0 . 1.0 .. 100.0) OPTIONAL,
+      ramp-rate              [2]      REAL (0.0 . 1.0 .. 100.0) OPTIONAL,
+      step-increment         [3]      REAL (0.0 . 1.0 .. 100.0) OPTIONAL,
+      fade-time              [4]      Unsigned (100 .. 86400000) OPTIONAL
+      priority               [5]      Unsigned (1 .. 16) OPTIONAL
+
+      Note that the combination of level, ramp-rate, step-increment and fade-time fields
+      are dependent on the specific lighting-operation. See table 12.467
+      }
+*/
+static guint
+fLightingCommand(tvbuff_t *tvb, packet_info *pinfo, proto_tree *tree, guint offset);
 
 
 /**
@@ -9035,6 +9050,67 @@ fLogMultipleRecord(tvbuff_t *tvb, packet_info *pinfo, proto_tree *tree, guint of
                 return offset;
             }
             offset += fTagHeaderTree(tvb, pinfo, tree, offset, &tag_no, &tag_info, &lvt);
+            break;
+        default:
+            return offset;
+        }
+        if (offset == lastoffset) break;     /* nothing happened, exit loop */
+    }
+    return offset;
+}
+
+
+/*
+BACnetLightingCommand ::= SEQUENCE {
+      operation              [0]      BACnetLightingOperation,
+      target-level           [1]      REAL (0.0 . 1.0 .. 100.0) OPTIONAL,
+      ramp-rate              [2]      REAL (0.0 . 1.0 .. 100.0) OPTIONAL,
+      step-increment         [3]      REAL (0.0 . 1.0 .. 100.0) OPTIONAL,
+      fade-time              [4]      Unsigned (100 .. 86400000) OPTIONAL
+      priority               [5]      Unsigned (1 .. 16) OPTIONAL
+
+      Note that the combination of level, ramp-rate, step-increment and fade-time fields
+      are dependent on the specific lighting-operation. See table 12.467
+      }
+*/
+static guint
+fLightingCommand(tvbuff_t *tvb, packet_info *pinfo, proto_tree *tree, guint offset)
+{
+    guint   lastoffset = 0;
+    guint8  tag_no, tag_info;
+    guint32 lvt;
+
+    while (tvb_reported_length_remaining(tvb, offset) > 0) {
+        lastoffset = offset;
+        /* check the tag.  A closing tag means we are done */
+        fTagHeader(tvb, pinfo, offset, &tag_no, &tag_info, &lvt);
+        if (tag_is_closing(tag_info)) {
+            return offset;
+        }
+        switch (tag_no) {
+        case 0: /* operation */
+            offset  = fEnumeratedTag(tvb, pinfo, tree, offset,
+                "Operation: ", BACnetLightingOperation);
+            break;
+        case 1: /* target-level - OPTIONAL*/
+            offset = fRealTag(tvb, pinfo, tree, offset,
+			    "target-level: ");
+            break;
+        case 2: /* ramp-rate - OPTIONAL*/
+            offset = fRealTag(tvb, pinfo, tree, offset,
+			    "ramp-rate: ");
+            break;
+        case 3: /* step-increment - OPTIONAL*/
+            offset = fRealTag(tvb, pinfo, tree, offset,
+			    "step-increment: ");
+            break;
+        case 4: /* fade-time - OPTIONAL*/
+            offset = fUnsignedTag(tvb, pinfo, tree, offset,
+			    "fade-time: ");
+            break;
+        case 5: /* priority - OPTIONAL */
+            offset = fUnsignedTag(tvb, pinfo, tree, offset,
+                "priority: ");
             break;
         default:
             return offset;
